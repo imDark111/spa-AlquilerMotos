@@ -434,7 +434,7 @@ export class LocalStorageService {
         // Motos para niños 11-14 años (70-110cc)
         new Moto('Honda', 'CRF110F', 2023, 110, 18, true, 'disponible', 'https://motos.honda.com.ec/uploads/galeria/CRF-110.png'),
         new Moto('Yamaha', 'TTR110E', 2023, 110, 18, true, 'disponible', 'https://www.incolmotos-yamaha.com.co/wp-content/uploads/2018/03/ttr110_2025-1.jpg'),
-        new Moto('Kawasaki', 'KLX110R', 2023, 112, 20, true, 'disponible', 'https://storage.kawasaki.eu/public/kawasaki.eu/en-EU/model/22MY_KLX110R_GN1_STU%20(2).001.png'),
+        new Moto('Kawasaki', 'KLX110R', 2023, 112, 20, true, 'disponible', 'https://content2.kawasaki.com/ContentStorage/KMC/ProductTrimGroup/52/44b36520-8bbb-4550-8bbd-52484f2fa298.jpg?w=1500'),
         new Moto('Suzuki', 'DR-Z110', 2023, 108, 19, true, 'disponible', 'https://bikez.com/pictures/suzuki/2003/dr-z%20110.jpg'),
         
         // Motos para adolescentes 15+ años (125cc+)
