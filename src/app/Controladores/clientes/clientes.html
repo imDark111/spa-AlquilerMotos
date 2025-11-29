@@ -1,0 +1,122 @@
+<div class="container">
+  <h2>Gestión de Clientes</h2>
+
+  <div class="actions">
+    <button class="btn btn-primary" (click)="nuevoCliente()">
+      ➕ Nuevo Cliente
+    </button>
+  </div>
+
+  <!-- Formulario -->
+  <div class="form-container" *ngIf="modoFormulario">
+    <h3>{{ modoEdicion ? 'Editar Cliente' : 'Nuevo Cliente' }}</h3>
+    <form (ngSubmit)="guardarCliente()">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombres *</label>
+          <input type="text" [(ngModel)]="clienteForm.nombres" name="nombres" required>
+        </div>
+        <div class="form-group">
+          <label>Apellidos *</label>
+          <input type="text" [(ngModel)]="clienteForm.apellidos" name="apellidos" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Cédula *</label>
+          <input type="text" [(ngModel)]="clienteForm.cedula" name="cedula" required>
+        </div>
+        <div class="form-group">
+          <label>Fecha de Nacimiento *</label>
+          <input type="date" [(ngModel)]="clienteForm.fechaNacimiento" name="fechaNacimiento" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" [(ngModel)]="clienteForm.email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label>Teléfono *</label>
+          <input type="text" [(ngModel)]="clienteForm.telefono" name="telefono" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Licencia de Conducir *</label>
+          <input type="text" [(ngModel)]="clienteForm.licenciaConducir" name="licencia" required>
+        </div>
+        <div class="form-group">
+          <label>Dirección</label>
+          <input type="text" [(ngModel)]="clienteForm.direccion" name="direccion">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="clienteForm.clienteFrecuente" name="clienteFrecuente">
+          ⭐ Cliente Frecuente (10% descuento adicional)
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-success" [disabled]="!validarFormulario()">
+          💾 Guardar
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="cancelarFormulario()">
+          ❌ Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Tabla de clientes -->
+  <div class="table-container">
+    <table *ngIf="clientes.length > 0">
+      <thead>
+        <tr>
+          <th>Nombre Completo</th>
+          <th>Cédula</th>
+          <th>Edad</th>
+          <th>Email</th>
+          <th>Teléfono</th>
+          <th>Tipo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cliente of clientes">
+          <td>{{ cliente.nombreCompleto }}</td>
+          <td>{{ cliente.cedula }}</td>
+          <td>
+            <span [class.edad-valida]="cliente.edad >= 18" [class.edad-invalida]="cliente.edad < 18">
+              {{ cliente.edad }} años
+            </span>
+          </td>
+          <td>{{ cliente.email }}</td>
+          <td>{{ cliente.telefono }}</td>
+          <td>
+            <span class="badge" [class.badge-frecuente]="cliente.clienteFrecuente" [class.badge-normal]="!cliente.clienteFrecuente">
+              {{ cliente.clienteFrecuente ? '⭐ Frecuente' : 'Normal' }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <button class="btn btn-sm btn-warning" (click)="editarCliente(cliente)">
+              ✏️ Editar
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="eliminarCliente(cliente.id)">
+              🗑️ Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="clientes.length === 0" class="empty-state">
+      <p>No hay clientes registrados. ¡Agrega un nuevo cliente!</p>
+    </div>
+  </div>
+</div>

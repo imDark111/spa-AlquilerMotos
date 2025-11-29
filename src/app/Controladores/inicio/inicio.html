@@ -1,0 +1,69 @@
+<div class="container">
+  <div class="hero">
+    <div class="hero-logo">🏁</div>
+    <h1>ECO-MOVE</h1>
+    <p class="hero-subtitle">La velocidad es nuestro estilo</p>
+    <p class="hero-description">Alquiler de motocicletas de alta cilindrada</p>
+    <button class="btn-reset" (click)="limpiarDatos()">🔄 Limpiar localStorage</button>
+  </div>
+
+  <div class="stats-container">
+    <div class="stat-card">
+      <div class="stat-icon">🏍️</div>
+      <div class="stat-info">
+        <h3>{{ totalMotos }}</h3>
+        <p>Total Motos</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-info">
+        <h3>{{ motosDisponibles }}</h3>
+        <p>Motos Disponibles</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">👥</div>
+      <div class="stat-info">
+        <h3>{{ totalClientes }}</h3>
+        <p>Total Clientes</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">📋</div>
+      <div class="stat-info">
+        <h3>{{ alquileresActivos }}</h3>
+        <p>Alquileres Activos</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="features">
+    <h2>🏆 Nuestros Servicios Premium</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🏍️</div>
+        <h3>Motos de Alto Rendimiento</h3>
+        <p>Contamos con las mejores marcas: Yamaha, Honda, Kawasaki, Suzuki y KTM</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Alquiler Instantáneo</h3>
+        <p>Proceso rápido y sencillo para que salgas a rodar en minutos</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>Seguridad Garantizada</h3>
+        <p>Todas nuestras motos están en perfectas condiciones mecánicas</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💰</div>
+        <h3>Precios Competitivos</h3>
+        <p>Las mejores tarifas del mercado con opciones flexibles de pago</p>
+      </div>
+    </div>
+  </div>
+</div>

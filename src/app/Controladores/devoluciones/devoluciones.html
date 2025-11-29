@@ -1,0 +1,159 @@
+<div class="devoluciones-container">
+  <div class="header">
+    <h1>🔄 Gestión de Devoluciones</h1>
+    <button class="btn-primary" (click)="nuevaDevolucion()" *ngIf="!modoFormulario">
+      ➕ Nueva Devolución
+    </button>
+  </div>
+
+  <!-- Formulario de Devolución -->
+  <div class="form-container" *ngIf="modoFormulario">
+    <h2>Procesar Devolución</h2>
+    
+    <div class="alert alert-error" *ngIf="mensajeError">
+      {{ mensajeError }}
+    </div>
+
+    <form>
+      <div class="form-group">
+        <label for="alquilerId">Alquiler Activo *</label>
+        <select 
+          id="alquilerId" 
+          [(ngModel)]="devolucionForm.alquilerId" 
+          name="alquilerId"
+          required>
+          <option value="">Seleccione un alquiler</option>
+          <option *ngFor="let alquiler of alquileresActivos" [value]="alquiler.id">
+            {{ getAlquilerInfo(alquiler.id) }} - Fecha tentativa: {{ alquiler.fechaTentativaDevolucion | date:'dd/MM/yyyy' }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="fechaDevolucionReal">Fecha Real de Devolución *</label>
+        <input 
+          type="date" 
+          id="fechaDevolucionReal" 
+          [(ngModel)]="devolucionForm.fechaDevolucionReal" 
+          name="fechaDevolucionReal"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="observaciones">Observaciones</label>
+        <textarea 
+          id="observaciones" 
+          [(ngModel)]="devolucionForm.observaciones" 
+          name="observaciones"
+          rows="3"
+          placeholder="Estado del vehículo, comentarios adicionales..."></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-primary" (click)="procesarDevolucion()">
+          💾 Procesar Devolución
+        </button>
+        <button type="button" class="btn-secondary" (click)="cancelar()">
+          ❌ Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Lista de Devoluciones -->
+  <div class="devoluciones-lista">
+    <h2>Historial de Devoluciones</h2>
+    
+    <div class="alert alert-info" *ngIf="devoluciones.length === 0">
+      No hay devoluciones registradas
+    </div>
+
+    <div class="devoluciones-grid" *ngIf="devoluciones.length > 0">
+      <div class="devolucion-card" *ngFor="let devolucion of devoluciones">
+        <div class="card-header">
+          <h3>{{ getNombreCliente(devolucion.alquilerId) }}</h3>
+          <span class="badge" [ngClass]="getClaseRetraso(devolucion.diasRetraso)">
+            <span *ngIf="devolucion.diasRetraso === 0">✅ A tiempo</span>
+            <span *ngIf="devolucion.diasRetraso > 0">⚠️ {{ devolucion.diasRetraso }} días de retraso</span>
+          </span>
+        </div>
+
+        <div class="card-body">
+          <p><strong>🏍️ Vehículo:</strong> {{ getNombreMoto(devolucion.alquilerId) }}</p>
+          <p><strong>📅 Fecha Devolución:</strong> {{ devolucion.fechaDevolucionReal | date:'dd/MM/yyyy HH:mm' }}</p>
+          
+          <div class="costos-detalle">
+            <div class="seccion-alquiler">
+              <h4 style="color: #ffd700; margin-bottom: 10px;">📊 Resumen Recalculado</h4>
+              
+              <div class="costo-item">
+                <span>📅 Días Totales ({{ devolucion.diasRetraso > 0 ? 'originales + retraso' : 'sin retraso' }}):</span>
+                <span class="valor-base">{{ devolucion.diasTotales }} días</span>
+              </div>
+
+              <div class="costo-item">
+                <span>💵 Importe Recalculado:</span>
+                <span class="valor-base">${{ devolucion.importeRecalculado.toFixed(2) }}</span>
+              </div>
+
+              <div class="costo-item" *ngIf="devolucion.descuentoUsoExtendido > 0">
+                <span>📅 Desc. Uso Extendido (15%):</span>
+                <span class="valor-positivo">-${{ devolucion.descuentoUsoExtendido.toFixed(2) }}</span>
+              </div>
+
+              <div class="costo-item" *ngIf="devolucion.descuentoClienteFrecuente > 0">
+                <span>⭐ Desc. Cliente Frecuente (10%):</span>
+                <span class="valor-positivo">-${{ devolucion.descuentoClienteFrecuente.toFixed(2) }}</span>
+              </div>
+
+              <div class="costo-item" *ngIf="devolucion.depositoRecalculado > 0">
+                <span>🔒 Depósito Recalculado (12%):</span>
+                <span class="valor-deposito">+${{ devolucion.depositoRecalculado.toFixed(2) }}</span>
+              </div>
+
+              <div class="costo-item" *ngIf="devolucion.multaPorRetraso > 0">
+                <span>💸 Multa por Retraso ({{ devolucion.diasRetraso }} días + 10%):</span>
+                <span class="valor-negativo">+${{ devolucion.multaPorRetraso.toFixed(2) }}</span>
+              </div>
+
+              <div class="costo-item total-destacado">
+                <span><strong>📊 Subtotal:</strong></span>
+                <span class="valor-subtotal">${{ devolucion.subtotalRecalculado.toFixed(2) }}</span>
+              </div>
+            </div>
+
+            <hr style="margin: 15px 0; border: 2px solid #ffd700;">
+            
+            <div class="seccion-deposito">
+              <h4 style="color: #00ff00; margin-bottom: 10px;">🔓 Gestión del Depósito</h4>
+              
+              <div class="costo-item" *ngIf="devolucion.depositoDevuelto > 0">
+                <span>💚 Depósito Devuelto al Cliente:</span>
+                <span class="valor-positivo">${{ devolucion.depositoDevuelto.toFixed(2) }}</span>
+              </div>
+
+              <div class="costo-item" *ngIf="devolucion.depositoDevuelto === 0 && devolucion.diasRetraso > 0">
+                <span>⚠️ Depósito Retenido (aplicado a deuda):</span>
+                <span class="valor-retenido">$0.00</span>
+              </div>
+
+              <div class="info-box" *ngIf="devolucion.diasRetraso === 0">
+                <p>✨ Devolución perfecta: Se devuelve el depósito completo</p>
+              </div>
+            </div>
+          </div>
+
+          <p *ngIf="devolucion.observaciones" class="observaciones">
+            <strong>📝 Observaciones:</strong> {{ devolucion.observaciones }}
+          </p>
+        </div>
+
+        <div class="card-footer">
+          <button class="btn-danger" (click)="eliminarDevolucion(devolucion.id)">
+            🗑️ Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

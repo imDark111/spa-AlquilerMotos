@@ -1,0 +1,164 @@
+<div class="container">
+  <h2>Gestión de Alquileres</h2>
+
+  <div class="actions">
+    <button class="btn btn-primary" (click)="nuevoAlquiler()">
+      ➕ Nuevo Alquiler
+    </button>
+  </div>
+
+  <!-- Formulario -->
+  <div class="form-container" *ngIf="modoFormulario">
+    <h3>{{ modoEdicion ? 'Editar Alquiler' : 'Nuevo Alquiler' }}</h3>
+    <form (ngSubmit)="guardarAlquiler()">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Cliente * <span class="info-text">(Solo clientes ≥18 años)</span></label>
+          <select [(ngModel)]="alquilerForm.clienteId" name="clienteId" required (change)="calcularCostos()">
+            <option value="">Seleccione un cliente</option>
+            <option *ngFor="let cliente of clientesFiltrados" [value]="cliente.id">
+              {{ cliente.nombreCompleto }} ({{ cliente.edad }} años) {{ cliente.clienteFrecuente ? '⭐' : '' }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Moto * <span class="info-text">(Vehículos disponibles)</span></label>
+          <select [(ngModel)]="alquilerForm.motoId" name="motoId" required (change)="onMotoChange()">
+            <option value="">Seleccione una moto</option>
+            <option *ngFor="let moto of motosDisponibles" [value]="moto.id">
+              {{ moto.marca }} {{ moto.modelo }} - ${{ moto.precioAlquilerDia }}/día
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Fecha Inicio *</label>
+          <input type="date" [(ngModel)]="alquilerForm.fechaInicio" name="fechaInicio" required (change)="calcularCostos()">
+        </div>
+        <div class="form-group">
+          <label>Fecha Tentativa Devolución *</label>
+          <input type="date" [(ngModel)]="alquilerForm.fechaTentativaDevolucion" name="fechaTentativa" required (change)="calcularCostos()">
+        </div>
+      </div>
+
+      <!-- Desglose de Costos -->
+      <div class="costos-desglose" *ngIf="alquilerForm.diasAlquiler > 0">
+        <h4>💰 Desglose de Costos</h4>
+        <div class="costo-grid">
+          <div class="costo-item">
+            <span class="costo-label">Días de Alquiler:</span>
+            <span class="costo-valor">{{ alquilerForm.diasAlquiler }}</span>
+          </div>
+          <div class="costo-item">
+            <span class="costo-label">Tarifa Diaria:</span>
+            <span class="costo-valor">${{ tarifaDiaria.toFixed(2) }}</span>
+          </div>
+          <div class="costo-item destacado">
+            <span class="costo-label">Importe Base:</span>
+            <span class="costo-valor">${{ alquilerForm.importe.toFixed(2) }}</span>
+          </div>
+          
+          <div class="costo-item descuento" *ngIf="alquilerForm.descuentoUsoExtendido > 0">
+            <span class="costo-label">📅 Descuento Uso Extendido (15%):</span>
+            <span class="costo-valor">-${{ alquilerForm.descuentoUsoExtendido.toFixed(2) }}</span>
+          </div>
+          
+          <div class="costo-item descuento" *ngIf="alquilerForm.descuentoClienteFrecuente > 0">
+            <span class="costo-label">⭐ Descuento Cliente Frecuente (10%):</span>
+            <span class="costo-valor">-${{ alquilerForm.descuentoClienteFrecuente.toFixed(2) }}</span>
+          </div>
+          
+          <div class="costo-item deposito">
+            <span class="costo-label">🔒 Depósito (12%):</span>
+            <span class="costo-valor">+${{ alquilerForm.deposito.toFixed(2) }}</span>
+          </div>
+          
+          <div class="costo-item total">
+            <span class="costo-label">TOTAL A PAGAR:</span>
+            <span class="costo-valor">${{ alquilerForm.totalAPagar.toFixed(2) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Observaciones</label>
+        <textarea [(ngModel)]="alquilerForm.observaciones" name="observaciones" rows="3"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-success" [disabled]="!validarFormulario()">
+          💾 Guardar
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="cancelarFormulario()">
+          ❌ Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Tabla de alquileres -->
+  <div class="table-container">
+    <table *ngIf="alquileres.length > 0">
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Moto</th>
+          <th>Inicio</th>
+          <th>Devolución</th>
+          <th>Días</th>
+          <th>Importe</th>
+          <th>Descuentos</th>
+          <th>Depósito</th>
+          <th>Total</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let alquiler of alquileres" [ngClass]="getClienteClass(alquiler.clienteId)">
+          <td>
+            {{ getNombreCliente(alquiler.clienteId) }}
+            <span *ngIf="getClienteClass(alquiler.clienteId)" class="badge-mini">⭐</span>
+          </td>
+          <td>{{ getNombreMoto(alquiler.motoId) }}</td>
+          <td>{{ alquiler.fechaInicio | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ alquiler.fechaTentativaDevolucion | date: 'dd/MM/yyyy' }}</td>
+          <td><strong>{{ alquiler.diasAlquiler }}</strong></td>
+          <td class="monto">${{ alquiler.importe.toFixed(2) }}</td>
+          <td class="descuentos">
+            <div *ngIf="alquiler.descuentoUsoExtendido > 0" class="desc-item">
+              📅 -${{ alquiler.descuentoUsoExtendido.toFixed(2) }}
+            </div>
+            <div *ngIf="alquiler.descuentoClienteFrecuente > 0" class="desc-item">
+              ⭐ -${{ alquiler.descuentoClienteFrecuente.toFixed(2) }}
+            </div>
+            <span *ngIf="alquiler.descuentoUsoExtendido === 0 && alquiler.descuentoClienteFrecuente === 0" class="sin-desc">
+              Sin descuentos
+            </span>
+          </td>
+          <td class="deposito">${{ alquiler.deposito.toFixed(2) }}</td>
+          <td class="total-destacado">${{ alquiler.totalAPagar.toFixed(2) }}</td>
+          <td>
+            <span class="badge" [ngClass]="getEstadoClass(alquiler.estado)">
+              {{ alquiler.estado }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <button *ngIf="alquiler.estado === 'activo'" class="btn btn-sm btn-info" (click)="finalizarAlquiler(alquiler.id)">
+              ✅ Finalizar
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="eliminarAlquiler(alquiler.id)">
+              🗑️ Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="alquileres.length === 0" class="empty-state">
+      <p>No hay alquileres registrados. ¡Crea un nuevo alquiler!</p>
+    </div>
+  </div>
+</div>

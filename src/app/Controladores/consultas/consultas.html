@@ -1,0 +1,178 @@
+<div class="consultas-container">
+  <div class="header">
+    <h1>📊 Consultas y Reportes ECO-MOVE</h1>
+    <button class="btn-refresh" (click)="actualizar()">
+      🔄 Actualizar
+    </button>
+  </div>
+
+  <!-- Consulta 1: Clientes con múltiples alquileres -->
+  <div class="consulta-seccion">
+    <h2>👥 1. Clientes que alquilaron más de un vehículo</h2>
+    <div class="alert alert-info" *ngIf="clientesMultiplesAlquileres.length === 0">
+      No hay clientes con múltiples alquileres
+    </div>
+    <div class="tabla-responsive" *ngIf="clientesMultiplesAlquileres.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Cédula</th>
+            <th>Email</th>
+            <th>Cantidad de Alquileres</th>
+            <th>Tipo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of clientesMultiplesAlquileres">
+            <td>{{ item.cliente.nombreCompleto }}</td>
+            <td>{{ item.cliente.cedula }}</td>
+            <td>{{ item.cliente.email }}</td>
+            <td class="numero-destacado">{{ item.cantidadAlquileres }}</td>
+            <td>
+              <span class="badge" [class.frecuente]="item.cliente.clienteFrecuente">
+                {{ item.cliente.clienteFrecuente ? '⭐ Frecuente' : 'Regular' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Consulta 2: Vehículos más alquilados -->
+  <div class="consulta-seccion">
+    <h2>🏍️ 2. Vehículos más alquilados</h2>
+    <div class="alert alert-info" *ngIf="vehiculosMasAlquilados.length === 0">
+      No hay vehículos alquilados
+    </div>
+    <div class="tabla-responsive" *ngIf="vehiculosMasAlquilados.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Año</th>
+            <th>Cilindrada</th>
+            <th>Tarifa/Día</th>
+            <th>Veces Alquilado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of vehiculosMasAlquilados; let i = index">
+            <td>
+              <span *ngIf="i === 0">🥇</span>
+              <span *ngIf="i === 1">🥈</span>
+              <span *ngIf="i === 2">🥉</span>
+              {{ item.moto.marca }}
+            </td>
+            <td>{{ item.moto.modelo }}</td>
+            <td>{{ item.moto.anio }}</td>
+            <td>{{ item.moto.cilindrada }} cc</td>
+            <td>${{ item.moto.precioAlquilerDia }}</td>
+            <td class="numero-destacado">{{ item.cantidadAlquileres }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Consulta 3: Alquileres con descuentos -->
+  <div class="consulta-seccion">
+    <h2>💰 3. Alquileres con descuento de cliente frecuente y uso extendido</h2>
+    <div class="alert alert-info" *ngIf="alquileresConDescuentos.length === 0">
+      No hay alquileres con ambos descuentos
+    </div>
+    <div class="tabla-responsive" *ngIf="alquileresConDescuentos.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Vehículo</th>
+            <th>Días</th>
+            <th>Importe</th>
+            <th>Desc. Uso Ext. (15%)</th>
+            <th>Desc. Frecuente (10%)</th>
+            <th>Total Descuentos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let alquiler of alquileresConDescuentos">
+            <td>{{ getNombreCliente(alquiler.clienteId) }}</td>
+            <td>{{ getNombreMoto(alquiler.motoId) }}</td>
+            <td>{{ alquiler.diasAlquiler }}</td>
+            <td>${{ alquiler.importe.toFixed(2) }}</td>
+            <td class="descuento">${{ alquiler.descuentoUsoExtendido.toFixed(2) }}</td>
+            <td class="descuento">${{ alquiler.descuentoClienteFrecuente.toFixed(2) }}</td>
+            <td class="total-descuentos">
+              ${{ (alquiler.descuentoUsoExtendido + alquiler.descuentoClienteFrecuente).toFixed(2) }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Consulta 4: Total recaudado -->
+  <div class="consulta-seccion destacada">
+    <h2>💵 4. Total recaudado por ECO-MOVE</h2>
+    <div class="recaudacion-grid">
+      <div class="recaudacion-card">
+        <div class="icono">📈</div>
+        <div class="valor">${{ totalRecaudado.importeNeto.toFixed(2) }}</div>
+        <div class="etiqueta">Importe Neto</div>
+        <div class="descripcion">Ingresos por alquileres (sin descuentos)</div>
+      </div>
+      <div class="recaudacion-card">
+        <div class="icono">🏦</div>
+        <div class="valor">${{ totalRecaudado.depositos.toFixed(2) }}</div>
+        <div class="etiqueta">Depósitos</div>
+        <div class="descripcion">Depósitos recibidos (12%)</div>
+      </div>
+      <div class="recaudacion-card">
+        <div class="icono">⚠️</div>
+        <div class="valor">${{ totalRecaudado.multas.toFixed(2) }}</div>
+        <div class="etiqueta">Multas</div>
+        <div class="descripcion">Penalizaciones por retrasos</div>
+      </div>
+      <div class="recaudacion-card total">
+        <div class="icono">💰</div>
+        <div class="valor">${{ totalRecaudado.total.toFixed(2) }}</div>
+        <div class="etiqueta">TOTAL RECAUDADO</div>
+        <div class="descripcion">Suma de todos los ingresos</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Consulta 5: Clientes con multa mayor al depósito -->
+  <div class="consulta-seccion">
+    <h2>⚠️ 5. Clientes que devolvieron tarde y pagaron multa mayor al depósito</h2>
+    <div class="alert alert-success" *ngIf="clientesMultaMayorDeposito.length === 0">
+      ✅ No hay clientes con multas superiores al depósito
+    </div>
+    <div class="tabla-responsive" *ngIf="clientesMultaMayorDeposito.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Vehículo</th>
+            <th>Días de Retraso</th>
+            <th>Depósito</th>
+            <th>Multa</th>
+            <th>Total a Pagar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of clientesMultaMayorDeposito" class="fila-alerta">
+            <td>{{ item.cliente.nombreCompleto }}</td>
+            <td>{{ getNombreMoto(item.alquiler.motoId) }}</td>
+            <td class="retraso">{{ item.devolucion.diasRetraso }} días</td>
+            <td>${{ item.alquiler.deposito.toFixed(2) }}</td>
+            <td class="multa">${{ item.devolucion.multaPorRetraso.toFixed(2) }}</td>
+            <td class="total-pagar">${{ item.devolucion.totalAPagar.toFixed(2) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

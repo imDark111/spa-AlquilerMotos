@@ -1,0 +1,286 @@
+.consultas-container {
+  padding: 20px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.header h1 {
+  color: #ffd700;
+  font-size: 2.5em;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  margin: 0;
+}
+
+.btn-refresh {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #ffd700, #ffaa00);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-refresh:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(255, 215, 0, 0.4);
+}
+
+/* Secciones de consulta */
+.consulta-seccion {
+  background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+  border: 2px solid #ffd700;
+  border-radius: 15px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.consulta-seccion.destacada {
+  border-color: #ff0000;
+  box-shadow: 0 8px 16px rgba(255, 0, 0, 0.3);
+}
+
+.consulta-seccion h2 {
+  color: #ffd700;
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+/* Alertas */
+.alert {
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.alert-info {
+  background: rgba(255, 215, 0, 0.2);
+  border: 2px solid #ffd700;
+  color: #ffd700;
+}
+
+.alert-success {
+  background: rgba(0, 255, 0, 0.2);
+  border: 2px solid #00ff00;
+  color: #00ff00;
+}
+
+/* Tablas */
+.tabla-responsive {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+thead {
+  background: linear-gradient(135deg, #ff0000, #cc0000);
+}
+
+thead th {
+  padding: 15px;
+  text-align: left;
+  color: white;
+  font-weight: bold;
+  font-size: 1.05em;
+}
+
+tbody tr {
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  transition: background 0.3s ease;
+}
+
+tbody tr:hover {
+  background: rgba(255, 215, 0, 0.1);
+}
+
+tbody td {
+  padding: 15px;
+  color: white;
+  font-size: 1em;
+}
+
+.numero-destacado {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #ffd700;
+  text-align: center;
+}
+
+.descuento {
+  color: #00ff00;
+  font-weight: bold;
+}
+
+.total-descuentos {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 15px;
+  background: #666;
+  color: white;
+  font-size: 0.9em;
+}
+
+.badge.frecuente {
+  background: linear-gradient(135deg, #ffd700, #ffaa00);
+  color: #000;
+  font-weight: bold;
+}
+
+/* Grid de recaudación */
+.recaudacion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
+}
+
+.recaudacion-card {
+  background: linear-gradient(135deg, #3a3a3a, #2a2a2a);
+  border: 2px solid #ffd700;
+  border-radius: 12px;
+  padding: 25px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.recaudacion-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(255, 215, 0, 0.3);
+}
+
+.recaudacion-card.total {
+  border-color: #ff0000;
+  background: linear-gradient(135deg, #4a0000, #3a0000);
+}
+
+.recaudacion-card .icono {
+  font-size: 3em;
+  margin-bottom: 10px;
+}
+
+.recaudacion-card .valor {
+  font-size: 2.2em;
+  font-weight: bold;
+  color: #ffd700;
+  margin: 15px 0;
+}
+
+.recaudacion-card.total .valor {
+  color: #ff0000;
+  font-size: 2.5em;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+.recaudacion-card .etiqueta {
+  font-size: 1.2em;
+  color: white;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.recaudacion-card .descripcion {
+  font-size: 0.95em;
+  color: #aaa;
+  margin-top: 10px;
+}
+
+/* Fila de alerta */
+.fila-alerta {
+  background: rgba(255, 0, 0, 0.1) !important;
+}
+
+.retraso {
+  color: #ff6666;
+  font-weight: bold;
+}
+
+.multa {
+  color: #ff0000;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.total-pagar {
+  color: #ff0000;
+  font-weight: bold;
+  font-size: 1.3em;
+  text-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .recaudacion-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .header h1 {
+    font-size: 2em;
+    text-align: center;
+  }
+
+  .consulta-seccion {
+    padding: 20px;
+  }
+
+  .consulta-seccion h2 {
+    font-size: 1.5em;
+  }
+
+  .recaudacion-grid {
+    grid-template-columns: 1fr;
+  }
+
+  table {
+    font-size: 0.9em;
+  }
+
+  thead th,
+  tbody td {
+    padding: 10px 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tabla-responsive {
+    font-size: 0.85em;
+  }
+
+  .recaudacion-card .valor {
+    font-size: 1.8em;
+  }
+
+  .recaudacion-card.total .valor {
+    font-size: 2em;
+  }
+}

@@ -1,0 +1,96 @@
+<div class="container">
+  <h2>Gestión de Motos</h2>
+
+  <div class="actions">
+    <button class="btn btn-primary" (click)="nuevaMoto()">
+      ➕ Nueva Moto
+    </button>
+  </div>
+
+  <!-- Formulario -->
+  <div class="form-container" *ngIf="modoFormulario">
+    <h3>{{ modoEdicion ? 'Editar Moto' : 'Nueva Moto' }}</h3>
+    <form (ngSubmit)="guardarMoto()">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Marca *</label>
+          <input type="text" [(ngModel)]="motoForm.marca" name="marca" required>
+        </div>
+        <div class="form-group">
+          <label>Modelo *</label>
+          <input type="text" [(ngModel)]="motoForm.modelo" name="modelo" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Año *</label>
+          <input type="number" [(ngModel)]="motoForm.anio" name="anio" required min="1900">
+        </div>
+        <div class="form-group">
+          <label>Cilindrada (cc) *</label>
+          <input type="number" [(ngModel)]="motoForm.cilindrada" name="cilindrada" required min="1">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Precio por Día ($) *</label>
+          <input type="number" [(ngModel)]="motoForm.precioAlquilerDia" name="precio" required min="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label>Imagen URL</label>
+          <input type="text" [(ngModel)]="motoForm.imagen" name="imagen">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>
+          <input type="checkbox" [(ngModel)]="motoForm.disponible" name="disponible">
+          Disponible
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-success" [disabled]="!validarFormulario()">
+          💾 Guardar
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="cancelarFormulario()">
+          ❌ Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Lista de motos -->
+  <div class="motos-grid">
+    <div class="moto-card" *ngFor="let moto of motos">
+      <div class="moto-image" [style.background-image]="'url(' + (moto.imagen || 'https://placehold.co/300x200?text=Sin+Imagen') + ')'">
+        <span class="badge" [class.disponible]="moto.disponible" [class.no-disponible]="!moto.disponible">
+          {{ moto.disponible ? 'Disponible' : 'No Disponible' }}
+        </span>
+      </div>
+      <div class="moto-info">
+        <h3>{{ moto.marca }} {{ moto.modelo }}</h3>
+        <p><strong>Año:</strong> {{ moto.anio }}</p>
+        <p><strong>Cilindrada:</strong> {{ moto.cilindrada }} cc</p>
+        <p><strong>Precio/día:</strong> ${{ moto.precioAlquilerDia }}</p>
+      </div>
+      <div class="moto-actions">
+        <button class="btn btn-sm btn-warning" (click)="editarMoto(moto)">
+          ✏️ Editar
+        </button>
+        <button class="btn btn-sm btn-info" (click)="toggleDisponibilidad(moto)">
+          🔄 Disponibilidad
+        </button>
+        <button class="btn btn-sm btn-danger" (click)="eliminarMoto(moto.id)">
+          🗑️ Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="motos.length === 0" class="empty-state">
+    <p>No hay motos registradas. ¡Agrega una nueva moto!</p>
+  </div>
+</div>
