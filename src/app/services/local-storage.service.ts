@@ -412,11 +412,35 @@ export class LocalStorageService {
     // Solo inicializar si no hay datos
     if (this.getMotos().length === 0) {
       const motosPrueba = [
+        // Motos para adultos (originales)
         new Moto('Yamaha', 'MT-07', 2023, 689, 25, true, 'disponible', 'https://www.yamahamotos.cl/wp-content/uploads/2018/06/mt07_2025_2.jpg'),
         new Moto('Honda', 'CB500F', 2022, 471, 45, true, 'disponible', 'https://www.honda.es/content/dam/central/motorcycles/colour-picker/street/cb500_hornet/cb500_hornet_2024/nh-436m_matte_gunpowder_black_metallic/2024-CB500-HORNET-MAT-GUNPOWDER-BLACK-METALLIC-Rh-Side.png/_jcr_content/renditions/c2_r.png'),
         new Moto('Kawasaki', 'Ninja 400', 2023, 399, 40, true, 'disponible', 'https://www.motofichas.com/images/cache/01-kawasaki-ninja-400-2023-estudio-verde-398-a-mobile.jpg'),
         new Moto('Suzuki', 'GSX-R750', 2021, 750, 60, true, 'disponible', 'https://i.blogs.es/864f9e/suzuki-gsxr-750-2006/650_1200.jpg'),
-        new Moto('KTM', 'Duke 390', 2023, 373, 38, true, 'disponible', 'https://casaexito.com/wp-content/uploads/2022/06/PHO_BIKE_90_RE_390.png')
+        new Moto('KTM', 'Duke 390', 2023, 373, 38, true, 'disponible', 'https://casaexito.com/wp-content/uploads/2022/06/PHO_BIKE_90_RE_390.png'),
+        new Moto('Honda', 'CBR1000RR', 2023, 999, 75, true, 'disponible', 'https://www.honda.es/content/dam/central/motorcycles/colour-picker/supersports/cbr1000rr-r_fireblade_sp/cbr1000rr-r_fireblade_sp_2024/nh-436_matte_ballistic_black_metallic/2024-CBR1000RRR-FIREBLADE-SP-MATTE-BALLISTIC-BLACK-METALLIC-Rh-Side.png/_jcr_content/renditions/c2.png'),
+        new Moto('Yamaha', 'YZF-R1', 2022, 998, 80, true, 'disponible', 'https://www.yamahamotos.cl/wp-content/uploads/2020/12/r1_2021_1.jpg'),
+        
+        // Motos para niños 4-6 años (50cc)
+        new Moto('Honda', 'CRF50F', 2023, 50, 10, true, 'disponible', 'https://powersports.honda.com/street/cruiser/-/media/products/family/cruiser/2023/rebel_1100_dct/gallery/2023_rebel_1100_dct_matte_armored_silver_metallic_08.png'),
+        new Moto('Yamaha', 'PW50', 2023, 50, 10, true, 'disponible', 'https://www.yamahamotos.cl/wp-content/uploads/2018/06/pw50_2020_1.jpg'),
+        new Moto('Kawasaki', 'KX65', 2023, 50, 12, true, 'disponible', 'https://www.kawasaki.com.mx/contentassets/81f5c8c5e5e54b4f9c2d0a2c6e8a5f9d/kx65_lime_green.png'),
+        
+        // Motos para niños 7-10 años (50-70cc)
+        new Moto('Honda', 'CRF70F', 2023, 70, 15, true, 'disponible', 'https://powersports.honda.com/off-road/competition/-/media/products/family/competition/2023/crf70f/gallery/2023_crf70f_extreme_red_07.png'),
+        new Moto('Yamaha', 'TTR50E', 2023, 65, 14, true, 'disponible', 'https://www.yamahamotos.cl/wp-content/uploads/2018/06/ttr50_2020_1.jpg'),
+        new Moto('Suzuki', 'DR-Z70', 2023, 67, 15, true, 'disponible', 'https://www.suzukicycles.com/-/media/project/cycles/images/products/2023/dr-z70/gallery/2023_dr-z70_yellow_right.png'),
+        
+        // Motos para niños 11-14 años (70-110cc)
+        new Moto('Honda', 'CRF110F', 2023, 110, 18, true, 'disponible', 'https://powersports.honda.com/off-road/competition/-/media/products/family/competition/2023/crf110f/gallery/2023_crf110f_extreme_red_07.png'),
+        new Moto('Yamaha', 'TTR110E', 2023, 110, 18, true, 'disponible', 'https://www.yamahamotos.cl/wp-content/uploads/2018/06/ttr110_2020_1.jpg'),
+        new Moto('Kawasaki', 'KLX110R', 2023, 112, 20, true, 'disponible', 'https://www.kawasaki.com.mx/contentassets/81f5c8c5e5e54b4f9c2d0a2c6e8a5f9d/klx110r_lime_green.png'),
+        new Moto('Suzuki', 'DR-Z110', 2023, 108, 19, true, 'disponible', 'https://www.suzukicycles.com/-/media/project/cycles/images/products/2023/dr-z110/gallery/2023_dr-z110_yellow_right.png'),
+        
+        // Motos para adolescentes 15+ años (125cc+)
+        new Moto('Honda', 'CB125R', 2023, 125, 22, true, 'disponible', 'https://www.honda.es/content/dam/central/motorcycles/colour-picker/street/cb125r/cb125r_2023/nh-436m_matte_gunpowder_black_metallic/2023-CB125R-MATTE-GUNPOWDER-BLACK-METALLIC-Rh-Side.png/_jcr_content/renditions/c2_r.png'),
+        new Moto('Yamaha', 'MT-125', 2023, 125, 23, true, 'disponible', 'https://www.yamahamotos.cl/wp-content/uploads/2018/06/mt125_2023_1.jpg'),
+        new Moto('KTM', 'Duke 125', 2023, 125, 24, true, 'disponible', 'https://www.ktm.com/contentassets/08f5c8c5e5e54b4f9c2d0a2c6e8a5f9d/duke125_orange.png')
       ];
       
       motosPrueba.forEach(moto => this.saveMoto(moto));
